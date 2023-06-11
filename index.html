@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do Web App</title>
+    <style>
+        body {
+            background-color: rgb(232, 217, 249);
+            font-family: Arial, sans-serif;
+        }
+
+        .task-container {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .completed-tasks {
+            color: rgb(6, 78, 78);
+            background-color: rgb(179, 125, 240);
+            border: 1px solid rgb(6, 78, 78);
+            border-radius: 5px;
+        }
+
+        .pending-tasks {
+            color: rgb(6, 78, 78);
+            
+            border: 1px solid rgb(6, 78, 78);
+            border-radius: 5px;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .task-actions button {
+            padding: 5px 10px;
+        }
+        .box{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        
+        }
+        .container{
+            display: flex;
+        }
+
+        .left-div, .right-div {
+          display: relative;
+            width: 50%;
+            padding: 10px;
+            border: 1px solid rgb(6, 78, 78);
+            border-radius: 5px;
+            color: rgb(6, 78, 78);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: -1;
+        }
+      
+        .child {
+            position: absolute;
+            top: 250px;
+            left: 10%;
+            width: 30%;
+            height: auto;
+            border: 1px solid #000;
+            border-radius: 5px;
+            color: rgb(6, 78, 78);
+            border: 1px solid rgb(6, 78, 78);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            
+        }
+
+        .child2 {
+            position: absolute;
+            top: 250px;
+            left: 60%;
+            width: 30%;
+            height: auto;
+            border: 1px solid #000;
+            border-radius: 5px;
+            color: rgb(6, 78, 78);
+            border: 1px solid rgb(6, 78, 78);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        button{
+            margin: 5px;
+            width: 80px;
+            height: 30px;
+            color: rgb(6, 78, 78);
+            background-color: rgb(232, 217, 249);
+            border: 1px solid rgb(6, 78, 78);
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        button::before{
+            content: "";
+            position: absolute;
+            background-color: orangered;
+            width: 0;
+            height: 0;
+            left: var(--xPos);
+            top: var(--yPos);
+            transform:translate(-50%,-50%);
+            border-radius: 50%;
+            transition: width 0.5s, height 0.5s;
+        }
+
+        button:hover::before{
+            width: 300px;
+            height: 300px;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1 align="center">To-Do Web App</h1>
+    <div class="box">
+    <input align="center" type="text" id="taskInput" placeholder="Enter task">
+    <button id="addTaskButton">Add Task</button>
+</div>
+<div class="container">
+  <div align="center" class="left-div">
+    <h2>Completed Tasks</h2>
+    <div class="child" id="completedTasksContainer"></div> 
+</div>
+<div align="center" class="right-div">
+    <h2>Pending Tasks</h2>
+    <div class="child2" id="pendingTasksContainer">
+        
+    </div>
+</div>
+</div>
+    <script>
+        var taskInput = document.getElementById("taskInput");
+        var addTaskButton = document.getElementById("addTaskButton");
+
+        var completedTasksContainer = document.getElementById("completedTasksContainer");
+        var pendingTasksContainer = document.getElementById("pendingTasksContainer");
+        function createTaskElement(taskName) {
+            var taskContainer = document.createElement("div");
+            taskContainer.classList.add("task-container");
+
+            var taskNameElement = document.createElement("span");
+            taskNameElement.textContent = taskName;
+
+            var taskActions = document.createElement("div");
+            taskActions.classList.add("task-actions");
+
+            var completeButton = document.createElement("button");
+            completeButton.textContent = "Complete";
+            completeButton.addEventListener("click", function() {
+                moveTask(taskContainer, completedTasksContainer);
+            });
+
+            var removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.addEventListener("click", function() {
+                taskContainer.remove();
+            });
+
+            taskActions.appendChild(completeButton);
+            taskActions.appendChild(removeButton);
+
+            taskContainer.appendChild(taskNameElement);
+            taskContainer.appendChild(taskActions);
+
+            return taskContainer;
+        }
+
+        function addTask() {
+            var taskName = taskInput.value.trim();
+
+            if (taskName !== "") {
+                var taskElement = createTaskElement(taskName);
+                pendingTasksContainer.appendChild(taskElement);
+                taskInput.value = "";
+            }
+        }
+        function moveTask(taskElement, destinationContainer) {
+            destinationContainer.appendChild(taskElement);
+            taskElement.classList.remove("completed-tasks");
+            taskElement.classList.remove("pending-tasks");
+            destinationContainer === completedTasksContainer ? taskElement.classList.add("completed-tasks") : taskElement.classList.add("pending-tasks");
+        }
+        addTaskButton.addEventListener("click", addTask);
+
+
+
+        const btnE1 = document.querySelector("button");
+
+        btnE1.addEventListener("mouseover", (event) => {
+        const x = event.pageX - btnE1.offsetLeft;
+        const y = event.pageY - btnE1.offsetTop;
+
+        btnE1.style.setProperty("--xPos", x + "px");
+        btnE1.style.setProperty("--yPos", y + "px");
+});
+    </script>
+</body>
+</html>
